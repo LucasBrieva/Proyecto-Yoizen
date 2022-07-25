@@ -47,12 +47,17 @@ export class IndexUsuariosComponent implements OnInit {
     this._adminService.getListUser().subscribe(
       res => {
         this.usuarios = res.clients;
-        if (this.filtro.id != "" || this.filtro.nombre != "" && this.filtro.rol != "") {
-          this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.toUpperCase().includes(this.filtro.id.toUpperCase()) && x.role == this.filtro.rol);
+        debugger;
+        if(this.filtro.rol != ""){
+          if (this.filtro.id != "" || this.filtro.nombre != "") {
+            this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.includes(this.filtro.id) && x.role == this.filtro.rol);
+          }
+        }else{
+          this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.includes(this.filtro.id));
+
         }
-        else if (this.filtro.id != "" || this.filtro.nombre != "") {
-          this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.toUpperCase().includes(this.filtro.id.toUpperCase()));
-        }
+
+
         this.has_data = this.usuarios.length > 0;
         this.load_data = false;
       },
