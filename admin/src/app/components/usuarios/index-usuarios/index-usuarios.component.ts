@@ -49,12 +49,9 @@ export class IndexUsuariosComponent implements OnInit {
         this.usuarios = res.clients;
         debugger;
         if(this.filtro.rol != ""){
-          if (this.filtro.id != "" || this.filtro.nombre != "") {
-            this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.includes(this.filtro.id) && x.role == this.filtro.rol);
-          }
+          this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.includes(this.filtro.id) && x.role == this.filtro.rol);
         }else{
           this.usuarios = this.usuarios.filter(x => x.name.toUpperCase().includes(this.filtro.nombre.toUpperCase()) && x.id.includes(this.filtro.id));
-
         }
 
 
