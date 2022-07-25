@@ -1,0 +1,83 @@
+<app-sidebar></app-sidebar>
+
+<!-- Page title-->
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Políticas de usuario</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">Este módulo lista todos las políticas usuarios.</p>
+  </div>
+</div>
+
+<div class="card box-shadow-sm">
+  <div class="card-header">
+    <h5 style="margin-bottom: 0px;">Filtro de políticas</h5>
+  </div>
+  <div class="card-header">
+    <form #filtroForm="ngForm" (ngSubmit)="filtrar()">
+      <div class="row">
+        <div class="col-lg-3 form-group">
+          <ng-autocomplete
+          [data]="usuarios"
+          [searchKeyword]="keyword"
+          [itemTemplate]="itemTemplate"
+          [notFoundTemplate]= "notFoundTemplate"
+          placeholder="Filtro nombre"
+          id="filtro_nombre"
+           name="filtro_nombre"
+            [(ngModel)]="filtro"
+          >
+
+          </ng-autocomplete>
+          <ng-template #itemTemplate let-item><a [innerHTML]="item.name"></a></ng-template>
+          <ng-template #notFoundTemplate let-item><div [innerHTML]="'notFound'"></div></ng-template>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row justify-content-end">
+          <button class="btn btn-outline-primary mr-3" type="submit">Filtrar</button>
+          <a (click)="limpiarFiltro()" class="btn btn-outline-warning">Limpiar filtros</a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Cliente</th>
+            <th>Suma asegurada</th>
+            <th>Fecha de inicio</th>
+            <th>Pago de instalación</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="load_data">
+          <tr>
+            <td class="text-center" colspan="5">
+              <div class="spinner-border text-danger m-2" role="status">
+                <span class="visually-hidden"></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <ng-container *ngIf="!load_data && has_data">
+          <tbody
+            *ngFor="let item of politicas | slice:(page - 1) * pageSize:(page-1)* pageSize+ pageSize; let indice = index">
+            <tr>
+              <td>{{item.userName}}</td>
+              <td>{{item.amountInsured | currency: 'USD' | lowercase}}</td>
+              <td>{{item.inceptionDate | date: 'dd/MM/yyyy'}}</td>
+              <td> <span class="badge badge-primary"><b>{{item.installmentPayment? "Sí" : "No"}}</b></span></td>
+            </tr>
+          </tbody>
+        </ng-container>
+      </table>
+      <ng-container *ngIf="!has_data">
+        <h3 class="text-center shadow-text">No hay politicas registradas</h3>
+      </ng-container>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="has_data">
+    <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="politicas.length"></ngb-pagination>
+  </div>
+</div>
